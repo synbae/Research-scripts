@@ -1,0 +1,30 @@
+1610353101369	geckodriver	INFO	Listening on 127.0.0.1:40143
+1610353101372	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofiler81tED"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1610353103415	Marionette	INFO	Listening on port 44281
+1610353103506	Marionette	WARN	TLS certificate errors will be ignored for this session
+1610353109095	Marionette	INFO	Stopped listening on port 44281
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1610353126593	geckodriver	INFO	Listening on 127.0.0.1:52625
+1610353127601	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofileg9gIr9"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1610353129578	Marionette	INFO	Listening on port 42423
+1610353129636	Marionette	WARN	TLS certificate errors will be ignored for this session
+1610353135786	Marionette	INFO	Stopped listening on port 42423
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
+1610353512565	geckodriver	INFO	Listening on 127.0.0.1:34323
+1610353512572	mozrunner::runner	INFO	Running command: "/usr/bin/firefox" "--marionette" "-foreground" "-no-remote" "-profile" "/tmp/rust_mozprofile5UMf4x"
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new Error("", "(unknown module)"))
+1610353514205	Marionette	INFO	Listening on port 35029
+1610353514305	Marionette	WARN	TLS certificate errors will be ignored for this session
+1610353519717	Marionette	INFO	Stopped listening on port 35029
+
+###!!! [Child][MessageChannel] Error: (msgtype=0x6C0027,name=PNecko::Msg_RemoveRequestContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Parent][RunMessage] Error: Channel closing: too late to send/recv, messages will be lost
+
