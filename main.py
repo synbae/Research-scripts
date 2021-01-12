@@ -1,36 +1,38 @@
 import threading
 from sys import exit
 from time import sleep
+
+import selenium
 from selenium import common
-from selenium.webdriver import Chrome;
+from selenium.webdriver import Chrome
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.options import Options;
-from selenium.webdriver.support import expected_conditions as EC;
-from selenium.webdriver.common.by import By;
-from selenium.webdriver.support.ui import WebDriverWait;
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 class YoutubeMusic(threading.Thread):
     def __init__(self):
-        threading.Thread.__init__(self);
-        self.FirstTime = True;
-        self.IncreaseTime = 30;
-        self.DecreaseTime = 30;
+        threading.Thread.__init__(self)
+        self.FirstTime = True
+        self.IncreaseTime = 30
+        self.DecreaseTime = 30
         self.user_agent = '--user-agent=Mozilla/5.0 (iPhone; CPU iPhone OS 10_3 like Mac OS X) AppleWebKit/602.1.50 (KHTML, like Gecko) CriOS/56.0.2924.75 Mobile/14E5239e Safari/602.1'
-        self.options = Options();
-        self.CompletelyLoaded = True;
-        self.options.add_argument(self.user_agent);
-        self.options.add_argument('--headless');
+        self.options = Options()
+        self.CompletelyLoaded = True
+        self.options.add_argument(self.user_agent)
+        self.options.add_argument('--headless')
         self.options.add_argument('--disable-extensions')
         self.options.add_argument('--log-level=3')
-        self.chromedriverPath = "./bin/chromedriver";  # change this with your actual chromedriver path.
-        self.Browser = Chrome(self.chromedriverPath, options=self.options);
+        self.chromedriverPath = executable_path="./Drivers/chromedriver/chromedriver"  # change this with your actual chromedriver path.
+        self.Browser = Chrome(self.chromedriverPath, options=self.options)
         # our browser is read to shoot.
 
     def HelpMenu(self):
         ProgramBanner = """
         [IN MAIN MENU ]
-        1.) Simply Put Song Name
+        1.) Enter Song Name to search
         Special Commands : 
         2.) =forward  : Move Current Video Backward ,For Specific Time (=forward:time in sec EG: =forward:35)
         3.) =backward : Move Current Video Backward, For Specific Time (=forward:time in sec EG: =backward:35)
@@ -48,50 +50,50 @@ class YoutubeMusic(threading.Thread):
 
     def NavigateYoutube(self, MusicName):
         # !t Will Navigate On Youtube Website.
-        self.MusicName = MusicName;
+        self.MusicName = MusicName
         self.CompletelyLoaded = False
-        print("[Loading %s On Youtube . . . ]" % self.MusicName);
-        self.Browser.get("https://m.youtube.com/results?search_query=%s" % self.MusicName);
-        self.Browser.implicitly_wait(5);
+        print("[Loading %s On Youtube . . . ]" % self.MusicName)
+        self.Browser.get("https://m.youtube.com/results?search_query=%s" % self.MusicName)
+        self.Browser.implicitly_wait(5)
 
     def ListVideos(self):
-        self.Counter = 1;
-        self.Videos = [];
+        self.Counter = 1
+        self.Videos = []
         for eachVid in range(1, 4):
-            self.xpath = "/html/body/ytm-app/div[3]/ytm-search/ytm-section-list-renderer/lazy-list/ytm-item-section-renderer/lazy-list/ytm-compact-video-renderer[%d]/div/div/a/h4/span" % eachVid;
+            self.xpath = "/html/body/ytm-app/div[3]/ytm-search/ytm-section-list-renderer/lazy-list/ytm-item-section-renderer/lazy-list/ytm-compact-video-renderer[%d]/div/div/a/h4/span" % eachVid
             self.EachVideo = WebDriverWait(self.Browser, 5).until(
                 EC.presence_of_element_located((By.XPATH, self.xpath)))
-            self.EachVideo = self.EachVideo.text;
+            self.EachVideo = self.EachVideo.text
             # self.EachVideo = self.Browser.find_element_by_xpath('/html/body/ytm-app/div[3]/ytm-search/ytm-section-list-renderer/lazy-list/ytm-item-section-renderer/lazy-list/ytm-compact-video-renderer[%d]/div/div/a/h4/span'%eachVid).text;
-            self.Videos.append(self.EachVideo);
+            self.Videos.append(self.EachVideo)
         for eachVid in self.Videos:
-            print("[%d]: %s" % (self.Counter, eachVid));
-            self.Counter += 1;
+            print("[%d]: %s" % (self.Counter, eachVid))
+            self.Counter += 1
 
     def RefreshPage(self):
         # !In Case Of Error Refresh Can Be Done.
-        self.CurrentPage = self.Browser.current_url;
-        self.Browser.get(self.CurrentPage);
+        self.CurrentPage = self.Browser.current_url
+        self.Browser.get(self.CurrentPage)
         print("Page Refreshed.")
 
     def PlayVideo(self, VideoID):
         # Finally Plays Video.
         # !VIDEO PLAY CODE HERE
-        self.VideoPlay = '//*[@id="app"]/div[3]/ytm-search/ytm-section-list-renderer/lazy-list/ytm-item-section-renderer/lazy-list/ytm-compact-video-renderer[%d]/div/div/a/h4/span' % VideoID;
-        self.Video = WebDriverWait(self.Browser, 5).until(EC.presence_of_element_located((By.XPATH, self.VideoPlay)));
+        self.VideoPlay = '//*[@id="app"]/div[3]/ytm-search/ytm-section-list-renderer/lazy-list/ytm-item-section-renderer/lazy-list/ytm-compact-video-renderer[%d]/div/div/a/h4/span' % VideoID
+        self.Video = WebDriverWait(self.Browser, 5).until(EC.presence_of_element_located((By.XPATH, self.VideoPlay)))
         sleep(2)
         self.Video.click()
 
         self.VideoTitle = WebDriverWait(self.Browser, 5).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'slim-video-metadata-title')));
+            EC.presence_of_element_located((By.CLASS_NAME, 'slim-video-metadata-title')))
         # self.VideoTitle = self.Browser.find_element_by_class_name('slim-video-metadata-title'); #!To Fetch Video Title.
-        self.VideoTitle = self.VideoTitle.text;
-        print('[Playing %s Youtube Now... ]' % self.VideoTitle);
-        self.CompletelyLoaded = True;
-        self.RefreshPage();
-        self.GetUrl = self.Browser.find_element_by_css_selector('video.video-stream.html5-main-video');
+        self.VideoTitle = self.VideoTitle.text
+        print('[Playing %s Youtube Now... ]' % self.VideoTitle)
+        self.CompletelyLoaded = True
+        self.RefreshPage()
+        self.GetUrl = self.Browser.find_element_by_css_selector('video.video-stream.html5-main-video')
         # self.GetUrl = WebDriverWait(self.Browser,30).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR,'video.video-stream.html5-main-video')));
-        self.GetUrl = self.GetUrl.get_attribute("currentSrc");
+        self.GetUrl = self.GetUrl.get_attribute("currentSrc")
         self.Browser.get(self.GetUrl)
 
     def MoveForward(self):
@@ -104,20 +106,20 @@ class YoutubeMusic(threading.Thread):
 
     def RestartVideo(self):
         # !Restart Current Video.
-        self.CurrentVideoUrl = self.GetUrl;
-        self.Browser.get(self.CurrentVideoUrl);
+        self.CurrentVideoUrl = self.GetUrl
+        self.Browser.get(self.CurrentVideoUrl)
         pass
 
     def Pause(self):
-        self.Browser.execute_script("document.getElementsByTagName('video')[0].pause()");
+        self.Browser.execute_script("document.getElementsByTagName('video')[0].pause()")
         pass
 
     def Play(self):
-        self.Browser.execute_script("document.getElementsByTagName('video')[0].play()");
+        self.Browser.execute_script("document.getElementsByTagName('video')[0].play()")
         pass
 
     def Close(self):
-        self.Browser.close();
+        self.Browser.close()
         exit(1)
 
     def ThreadStatus(self):
@@ -128,11 +130,11 @@ try:
     x = YoutubeMusic()
 except common.exceptions.WebDriverException:
     # ! if you have some problmes with web driver.
-    print("Error while using Chrome Driver (Possible Causes ) : ");
+    print("Error while using Chrome Driver (Possible Causes ) : ")
     print("1. Using Old Chrome Driver, Please Get Latest Version.")
     print("2. Incorrect Path of Chrome Driver Provided, Please Correct It.")
-    input();
-    exit();
+    input()
+    exit()
 
 while True:
     if (x.FirstTime):
@@ -188,10 +190,10 @@ while True:
 
         except selenium.common.exceptions.WebDriverException:
             # ! if you have some problmes with web driver.
-            print("Error while using Chrome Driver (Possible Causes ) : ");
+            print("Error while using Chrome Driver (Possible Causes ) : ")
             print("1. Using Old Chrome Driver, Please Get Latest Version.")
             print("2. Incorrect Path of Chrome Driver Provided, Please Correct It.")
-            input();
+            input()
         except common.exceptions.ElementClickInterceptedException:
             print("Unknown Error: Please Try Again.")
         except ValueError:
