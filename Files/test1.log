@@ -1,0 +1,5 @@
+2021-01-14 22:56:43 DEBUG    This is debug message
+2021-01-14 22:56:43 INFO     This is info message
+2021-01-14 22:56:43 WARNING  This is warning message
+2021-01-14 22:56:43 ERROR    This is error message
+2021-01-14 22:56:43 CRITICAL This is critical message
