@@ -18,7 +18,7 @@ class AppTesting(unittest.TestCase):
 
     # This will execute once at the start of every method
     @classmethod
-    def setUp(self):
+    def setUp(cls):
         print("This is login test")
 
     def test_Search(self):
@@ -35,7 +35,7 @@ class AppTesting(unittest.TestCase):
 
     # This will execute once at the end of every method
     @classmethod
-    def tearDown(self):
+    def tearDown(cls):
         print("this is logout test")
 
     # This will execute once at the end of the class
